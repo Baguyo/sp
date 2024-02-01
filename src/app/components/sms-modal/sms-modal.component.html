@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{title}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list lines="none">
+
+    <ng-container *ngIf="type === 'sms'">
+      <ion-item>
+        <ion-label>
+          <p>Smart</p>
+          <h3>{{smart}}</h3>
+        </ion-label>
+        <ion-button slot="end" color="primary" (click)="sms(smart)">
+          <ion-icon name="mail-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <p>Globe</p>
+          <h3>{{globe}}</h3>
+        </ion-label>
+        <ion-button slot="end" color="primary" (click)="sms(globe)">
+          <ion-icon name="mail-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ng-container>
+
+    <ng-container *ngIf="type === 'call'">
+      <ion-item>
+        <ion-label>
+          <p>Smart</p>
+          <h3>{{smart}}</h3>
+        </ion-label>
+        <ion-button slot="end" color="success" (click)="call(smart)">
+          <ion-icon name="call-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <p>Globe</p>
+          <h3>{{globe}}</h3>
+        </ion-label>
+        <ion-button slot="end" color="success" (click)="call(globe)">
+          <ion-icon name="call-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ng-container>
+
+  </ion-list>
+
+</ion-content>

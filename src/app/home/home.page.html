@@ -1,20 +1,164 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary">
     <ion-title>
-      Blank
+      EMERGENCY CONTACTS
+      <br>
+      <div class="location-container" (click)="changeLocation()">
+        <small class="location-name">{{municipalityName}}, {{provinceName}}</small>
+        <ion-icon name="compass"></ion-icon>
+      </div>
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name={{activeTheme}} id="theme-mode"></ion-icon>
+      <ion-toggle (ionChange)="toggleTheme($event)" color="dark"></ion-toggle>
+    </ion-buttons>
+    <!-- <ion-buttons slot="end">
+      <ion-toggle (ionChange)="toggleTheme($event)" aria-label="Dark toggle" color="dark" [checked]="true"></ion-toggle>
+    </ion-buttons> -->
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content >
+  <!-- SEARCH BAR -->
+  <ion-searchbar color="light" [autoHeight]="true" [debounce]="1000" (ionInput)="handleSearch($event)"></ion-searchbar>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <!-- <ion-grid>
+    <ion-row>
+      <ion-col size="12"> -->
+  <swiper-container #contactSlides [observer]="true" [observeParents]="true">
+
+    <!-- HOSPITAL -->
+    <swiper-slide>
+
+      <ion-list [inset]="false" *ngIf="isLoading">
+        <app-contact-item-skeleton *ngFor="let item of contactSkeletonCount"></app-contact-item-skeleton>
+      </ion-list>
+
+      <!-- CENTER ME -->
+      <ion-item lines="none" class="ion-text-center" *ngIf="!isLoading && hospitalContacts?.length === 0">
+        <ion-label>
+          <ion-icon name="compass-outline" class="not-found-icon"></ion-icon>
+          <h1>Data not found</h1>
+        </ion-label>
+      </ion-item>
+
+      <ion-list [inset]="false" *ngIf="!isLoading && hospitalContacts?.length > 0">
+        <app-contact-item *ngFor="let item of hospitalContacts" title="{{item.hospital.contact_name}}"
+          location="{{item.hospital.contact_location}}" contact_number_smart="{{item.hospital.contact_number_smart}}"
+          contact_number_globe={{item.hospital.contact_number_globe}} municipalityName="{{municipalityName}}"
+          provinceName="{{provinceName}}" image="{{item.hospital.image}}">
+        </app-contact-item>
+      </ion-list>
+
+      
+    </swiper-slide>
+
+    <!-- POLICE -->
+    <swiper-slide>
+
+      <ion-list [inset]="false" *ngIf="isLoading">
+        <app-contact-item-skeleton *ngFor="let item of contactSkeletonCount"></app-contact-item-skeleton>
+      </ion-list>
+
+      <ion-item lines="none" class="ion-text-center" *ngIf="!isLoading && policeContacts?.length === 0">
+        <ion-label>
+          <ion-icon name="compass-outline" class="not-found-icon"></ion-icon>
+          <h1>Data not found</h1>
+        </ion-label>
+      </ion-item>
+
+      <ion-list *ngIf="!isLoading && policeContacts?.length > 0">
+        <app-contact-item *ngFor="let item of policeContacts" title="{{item.police.contact_name}}"
+          location="{{item.police.contact_location}}" contact_number_smart="{{item.police.contact_number_smart}}"
+          contact_number_globe={{item.police.contact_number_globe}} municipalityName="{{municipalityName}}"
+          provinceName="{{provinceName}}" image="{{item.police.image}}">
+        </app-contact-item>
+      </ion-list>
+    </swiper-slide>
+
+    <!-- FIRE -->
+    <swiper-slide>
+
+      <ion-list [inset]="false" *ngIf="isLoading">
+        <app-contact-item-skeleton *ngFor="let item of contactSkeletonCount"></app-contact-item-skeleton>
+      </ion-list>
+
+      <ion-item lines="none" class="ion-text-center" *ngIf="!isLoading && fireContacts?.length === 0">
+        <ion-label>
+          <ion-icon name="compass-outline" class="not-found-icon"></ion-icon>
+          <h1>Data not found</h1>
+        </ion-label>
+      </ion-item>
+
+      <ion-list *ngIf="!isLoading && fireContacts?.length > 0">
+        <app-contact-item *ngFor="let item of fireContacts" title="{{item.fire.contact_name}}"
+          location="{{item.fire.contact_location}}" contact_number_smart="{{item.fire.contact_number_smart}}"
+          contact_number_globe={{item.fire.contact_number_globe}} municipalityName="{{municipalityName}}"
+          provinceName="{{provinceName}}" image="{{item.fire.image}}">
+        </app-contact-item>
+      </ion-list>
+
+    </swiper-slide>
+
+    <!-- AMBULANCE -->
+    <swiper-slide>
+
+      <ion-list [inset]="false" *ngIf="isLoading">
+        <app-contact-item-skeleton *ngFor="let item of contactSkeletonCount"></app-contact-item-skeleton>
+      </ion-list>
+
+      <ion-item lines="none" class="ion-text-center" *ngIf="!isLoading && ambulanceContacts?.length === 0">
+        <ion-label>
+          <ion-icon name="compass-outline" class="not-found-icon"></ion-icon>
+          <h1>Data not found</h1>
+        </ion-label>
+      </ion-item>
+
+      <ion-list *ngIf="!isLoading && ambulanceContacts?.length > 0">
+        <app-contact-item *ngFor="let item of ambulanceContacts" title="{{item.ambulance.contact_name}}"
+          location="{{item.ambulance.contact_location}}" contact_number_smart="{{item.ambulance.contact_number_smart}}"
+          contact_number_globe={{item.ambulance.contact_number_globe}} municipalityName="{{municipalityName}}"
+          provinceName="{{provinceName}}" image="{{item.ambulance.image}}">
+        </app-contact-item>
+      </ion-list>
+
+    </swiper-slide>
+
+  </swiper-container>
+
+  <!-- MODAL -->
+  <!-- <app-modal></app-modal> -->
+
 </ion-content>
+
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button (click)="switchContact('hospital')"
+          [ngClass]="{'active-contact': activeContact === 'hospital'}">
+          <!-- <img width="32" height="32" src="https://img.icons8.com/emoji/32/hospital-emoji.png" alt="hospital-emoji" /> -->
+          <!-- <ion-icon name="medkit-outline"></ion-icon> -->
+          Hospital
+        </ion-tab-button>
+        <ion-tab-button (click)="switchContact('police')" [ngClass]="{'active-contact': activeContact === 'police'}">
+          <!-- <img width="32" height="32" src="https://img.icons8.com/color/32/police-car.png" alt="police-car" /> -->
+          <!-- <ion-icon name="car-sport-outline"></ion-icon> -->
+          Police
+        </ion-tab-button>
+        <ion-tab-button (click)="switchContact('fire')" [ngClass]="{'active-contact': activeContact === 'fire'}">
+          <!-- <img width="32" height="32" src="https://img.icons8.com/color/32/fire-truck.png" alt="fire-truck" /> -->
+          <!-- <ion-icon name="car-outline"></ion-icon> -->
+          Fire
+        </ion-tab-button>
+        <ion-tab-button (click)="switchContact('ambulance')"
+          [ngClass]="{'active-contact': activeContact === 'ambulance'}">
+          <!-- <img width="32" height="32" src="https://img.icons8.com/officel/32/ambulance.png" alt="ambulance" /> -->
+          <!-- <ion-icon name="car-outline"></ion-icon> -->
+          Ambulance
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

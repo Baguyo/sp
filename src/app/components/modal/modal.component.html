@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Change Location</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- PROVINCE -->
+  <ion-item>
+    <ion-label>PROVINCE</ion-label>
+    <ion-select placeholder="ex. Palawan" (ionChange)="handleProvinceChange($event)" disabled="{{!isConnected}}">
+
+      <ion-select-option *ngFor="let province of provinces" value="{{province.id}}">
+        {{province.province_name}}
+      </ion-select-option>
+
+    </ion-select>
+  </ion-item>
+
+  <!-- CITY/MUNICIPALITY -->
+  <ion-item>
+    <ion-label>
+      {{municipalities?.length > 0 ? 'Select City / Municipality': municipalities?.length === 0 ? 'No Municipalities data for selected Province' : 'Select City / Municipality'}}"
+    </ion-label>
+    <ion-select disabled="{{municipalities?.length > 0 ? false: true }}"
+      placeholder="{{municipalities?.length > 0 ? 'ex. Puerto Princesa City': municipalities?.length === 0 ? '' : 'ex. Puerto Princesa City'}}"
+      (ionChange)="handleMunicipalityChange($event)">
+
+      <ng-container *ngIf="municipalities?.length > 0">
+        <ion-select-option *ngFor="let municipality of municipalities" value="{{municipality.id}}">
+          {{municipality.municipality_name}}
+        </ion-select-option>
+      </ng-container>
+
+      <!-- <ng-container *ngIf="municipalities?.length < 0">
+        <ion-select-option>
+          No Municipality data for the selected Province
+        </ion-select-option>
+      </ng-container> -->
+
+    </ion-select>
+    <!-- <ion-select value="peperoni" placeholder="Select Pizza">
+      <ion-select-option value="peperoni">ABORLAN</ion-select-option>
+      <ion-select-option value="hawaii">PUERTO PRINCESA</ion-select-option>
+    </ion-select> -->
+  </ion-item>
+
+  <ion-button expand="block"  shape="round" color="primary" class="submit-btn ion-margin-top" (click)="handleDataChange()">
+    SUBMIT
+  </ion-button>
+
+</ion-content>
+

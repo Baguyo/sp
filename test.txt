@@ -1,0 +1,6 @@
+https://www.tomislavstankovic.com/blog/ionic-3-sms/
+
+
+https://danielsogl.gitbook.io/awesome-cordova-plugins/sms
+
+https://github.com/cordova-sms/cordova-sms-plugin

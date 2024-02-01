@@ -1,0 +1,33 @@
+<ion-card>
+  <ion-item>
+    <!-- LOGO -->
+    <!-- <ion-avatar aria-hidden="true" slot="start" *ngIf="image !== 'false'">
+      <img src="{{image}}" alt=""
+        [height]="32" width="32">
+    </ion-avatar> -->
+
+    <!-- INFO -->
+    <ion-label>
+      <h2>{{title}}</h2>
+      <p>{{location}}</p>
+      <p>{{contact_number_smart}}</p>
+    </ion-label>
+
+
+    <div class="ion-margin-start">
+      <ion-button slot="end" color="primary" (click)="openModal('sms',title, contact_number_smart, contact_number_globe)">
+        <ion-icon name="mail-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button slot="end" color="success" (click)="openModal('call',title, contact_number_smart, contact_number_globe)">
+        <ion-icon name="call-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button color="secondary" expand="block" (click)="openLocation(location, municipalityName, provinceName)">
+        <ion-icon name="location-outline"></ion-icon>
+      </ion-button>
+
+    </div>
+
+  </ion-item>
+</ion-card>

@@ -1,0 +1,67 @@
+<ion-content [fullscreen]="true">
+  <div class="wrapper">
+    <ion-grid class="ion-align-items-baseline">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="12">
+
+          <ion-label>
+            <ion-text color="primary" class="ion-text-center">
+              <div class="title">
+                <h1>Emergency Contacts</h1>
+                <p>Help information in the Province</p>
+              </div>
+            </ion-text>
+          </ion-label>
+
+          <ion-item class="ion-margin-bottom">
+            <ion-label>Select Province</ion-label>
+            <ion-select placeholder="ex. Palawan" (ionChange)="handleProvinceChange($event)" disabled="{{!isConnected}}">
+
+              <ion-select-option *ngFor="let province of provinces" value="{{province.id}}">
+                {{province.province_name}}
+              </ion-select-option>
+
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Select City / Municipality</ion-label>
+            <ion-select disabled="{{municipalities?.length > 0 ? false: true }}"
+              placeholder="{{municipalities?.length > 0 ? 'ex. Puerto Princesa City': municipalities?.length === 0 ? 'No Municipalities data for selected Province' : 'ex. Puerto Princesa City'}}"
+              (ionChange)="handleMunicipalityChange($event)">
+
+              <ng-container *ngIf="municipalities?.length > 0">
+                <ion-select-option *ngFor="let municipality of municipalities" value="{{municipality.id}}">
+                  {{municipality.municipality_name}}
+                </ion-select-option>
+              </ng-container>
+
+              <!-- <ng-container *ngIf="municipalities?.length < 0">
+                <ion-select-option>
+                  No Municipality data for the selected Province
+                </ion-select-option>
+              </ng-container> -->
+
+            </ion-select>
+          </ion-item>
+
+
+
+          <!-- <ion-item class="ion-margin-top">
+            <ion-label>City/Municipality</ion-label>
+            <ion-select value="peperoni" multiple="true" placeholder="Select Pizza">
+              <ion-select-option value="peperoni">Peperoni</ion-select-option>
+              <ion-select-option value="hawaii">Hawaii</ion-select-option>
+            </ion-select>
+          </ion-item> -->
+
+          <ion-button expand="block" fill="clear" shape="round" (click)="handleSubmit()"
+            disabled="{{municipalityId && provinceId ?  false : true}}">
+            Get Contacts
+          </ion-button>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
