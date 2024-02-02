@@ -15,7 +15,7 @@ import { environment } from 'src/environments/environment';
 })
 export class BaseComponent implements ViewWillLeave {
 
-  public provinces: any;
+  public provinces: any = null;
   public provinceId: any = null;
   public municipalities: any = null;
   public municipalityId: any = null;
@@ -59,9 +59,14 @@ export class BaseComponent implements ViewWillLeave {
   public async handleProvinceChange(ev: any) {
     this.provinceId = ev.target.value;
     await this.loadingController.showLoading('Fetching Records.');
-    const response = await this.getRequest(`/municipality/${this.provinceId}`);
-    this.municipalities = response.data.data;
-    this.loadingController.dismiss();
+    // const response = await this.getRequest(`/municipality/${this.provinceId}`);
+    this.getRequest(`/municipality/${this.provinceId}`).then((response) => {
+      this.municipalities = response.data.data;
+      this.loadingController.dismiss();
+    }).catch(e => {
+      console.log(e);
+    });
+
   }
 
   public handleMunicipalityChange(ev: any) {
@@ -72,35 +77,40 @@ export class BaseComponent implements ViewWillLeave {
     console.log('province', this.provinceId);
     console.log('municipality', this.municipalityId);
 
-    let response = await this.getRequest(`/contact/${this.provinceId}`);
+    // let response = await this.getRequest(`/contact/${this.provinceId}`);
 
-    let contacts = JSON.stringify(response.data.data);
+    this.getRequest(`/contact/${this.provinceId}`).then(async (response) => {
+      let contacts = JSON.stringify(response.data.data);
+      await this.storage.set('contacts', contacts);
+      await this.storage.set('municipalityId', this.municipalityId);
+      this.router.navigateByUrl('/home');
+      // this.navCtrl.navigateForward
+      console.log('redirect to home');
+    }).catch(e => {
+      console.log(e);
+    })
 
-    await this.storage.set('contacts', contacts);
-    await this.storage.set('municipalityId', this.municipalityId);
 
-    this.router.navigateByUrl('/home');
-    // this.navCtrl.navigateForward
-    console.log('redirect to home');
+
   }
 
   public async handleDataChange() {
     console.log('province', this.provinceId);
     console.log('municipality', this.municipalityId);
 
-    let response = await this.getRequest(`/contact/${this.provinceId}`);
-
-    let contacts = JSON.stringify(response.data.data);
-
-    console.log(contacts);
-
-    await this.storage.set('contacts', contacts);
-    await this.storage.set('municipalityId', this.municipalityId);
-
-    window.location.reload();
-    // this.router.navigateByUrl('/login');
-    // this.navCtrl.navigateForward
-    console.log('redirect to home via change');
+    // let response = await this.getRequest(`/contact/${this.provinceId}`);
+    this.getRequest(`/contact/${this.provinceId}`).then(async (response) => {
+      let contacts = JSON.stringify(response.data.data);
+      console.log(contacts);
+      await this.storage.set('contacts', contacts);
+      await this.storage.set('municipalityId', this.municipalityId);
+      window.location.reload();
+      // this.router.navigateByUrl('/login');
+      // this.navCtrl.navigateForward
+      console.log('redirect to home via change');
+    }).catch(e => {
+      console.log(e);
+    });
   }
 
   public getRequest(route: any) {
@@ -126,11 +136,16 @@ export class BaseComponent implements ViewWillLeave {
         this.alertController.dismiss();
       }
 
-      await this.loadingController.showLoading('Fetching Records');
-      this.isConnected = true;
-      const response = await this.getRequest('/province')
-      this.provinces = response.data.data;
-      this.loadingController.dismiss();
+      if (this.provinces === null) {
+        await this.loadingController.showLoading('Fetching Records');
+        this.isConnected = true;
+        this.getRequest('/province').then((response) => {
+          this.provinces = response.data.data;
+          this.loadingController.dismiss();
+        }).catch((e) => {
+          console.log(e);
+        });
+      }
     }
   }
 
