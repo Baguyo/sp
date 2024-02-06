@@ -2,12 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CapacitorHttp } from '@capacitor/core';
 import { Network } from '@capacitor/network';
-import { IonModal, NavController } from '@ionic/angular';
+import { IonModal, NavController, ToastController } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AlertService } from 'src/app/services/alert.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { ToastService } from 'src/app/services/toast.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -28,9 +29,11 @@ export class ModalComponent extends BaseComponent {
     router: Router,
     alertController: AlertService,
     loadingController: LoadingService,
-    navCtrl: NavController
+    navCtrl: NavController,
+    toastCtrl: ToastService
+    
   ) {
-    super(storage, router, alertController, loadingController, navCtrl);
+    super(storage, router, alertController, loadingController, navCtrl, toastCtrl);
 
    }
 

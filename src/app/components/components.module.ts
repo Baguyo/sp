@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContactItemComponent } from './contact-item/contact-item.component';
 import { IonicModule } from '@ionic/angular';
@@ -26,6 +26,7 @@ import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
     ContactItemSkeletonComponent,
     SmsModalComponent
   ],
-  providers: [CallNumber]
+  providers: [CallNumber],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ComponentsModule { }

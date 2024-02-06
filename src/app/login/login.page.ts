@@ -8,6 +8,7 @@ import { AlertService } from '../services/alert.service';
 import { LoadingService } from '../services/loading.service';
 import { NavController } from '@ionic/angular';
 import { BaseComponent } from '../base/base.component';
+import { ToastService } from '../services/toast.service';
 
 
 @Component({
@@ -28,9 +29,11 @@ export class LoginPage extends BaseComponent {
    router: Router,
    alertController: AlertService,
    loadingController: LoadingService,
-   navCtrl: NavController
+   navCtrl: NavController,
+   toastCtrl: ToastService
   ) { 
-    super(storage, router, alertController, loadingController, navCtrl);
+    super(storage, router, alertController, loadingController, navCtrl, toastCtrl);
+    super.load();
   }
 
   // async ngOnInit() {

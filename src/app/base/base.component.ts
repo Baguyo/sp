@@ -7,6 +7,7 @@ import { NavController, ViewDidEnter, ViewDidLeave, ViewWillLeave } from '@ionic
 import { Network } from '@capacitor/network';
 import { CapacitorHttp } from '@capacitor/core';
 import { environment } from 'src/environments/environment';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-base',
@@ -26,9 +27,10 @@ export class BaseComponent implements ViewWillLeave {
     public router: Router,
     public alertController: AlertService,
     public loadingController: LoadingService,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    public toastCtrl: ToastService
   ) {
-    this.load();
+    // this.load();
   }
 
   ionViewWillLeave() {
@@ -65,6 +67,8 @@ export class BaseComponent implements ViewWillLeave {
       this.loadingController.dismiss();
     }).catch(e => {
       console.log(e);
+      this.toastCtrl.presentToast('Connection error. Please select Province again.');
+      this.loadingController.dismiss();
     });
 
   }
@@ -87,6 +91,7 @@ export class BaseComponent implements ViewWillLeave {
       // this.navCtrl.navigateForward
       console.log('redirect to home');
     }).catch(e => {
+      this.toastCtrl.presentToast('Connection error. Please try again.');
       console.log(e);
     })
 
@@ -126,27 +131,37 @@ export class BaseComponent implements ViewWillLeave {
 
   async setData(connection: any) {
     if (!connection) {
-      this.loadingController.showLoading('Fetching Records');
       await this.alertController.showAlert('Please connect to internet to fetch the latest record', null, 'The app will be free for offline use once you get the contacts. ');
       this.isConnected = false;
-      this.loadingController.dismiss();
+      this.provinces = null;
+      this.municipalities = null;
+      console.log('not connected');
+
     } else {
 
       if (this.alertController.isOpen()) {
         this.alertController.dismiss();
       }
 
-      if (this.provinces === null) {
-        await this.loadingController.showLoading('Fetching Records');
-        this.isConnected = true;
-        this.getRequest('/province').then((response) => {
-          this.provinces = response.data.data;
-          this.loadingController.dismiss();
-        }).catch((e) => {
-          console.log(e);
-        });
-      }
+
+      await this.loadingController.showLoading('Fetching Records');
+      this.isConnected = true;
+      this.getRequest('/province').then((response) => {
+        this.provinces = response.data.data;
+        this.loadingController.dismiss();
+      }).catch((e) => {
+        console.log('error')
+        console.log(e);
+        this.toastCtrl.presentToast('Connection error. Please try again.');
+        this.loadingController.dismiss();
+      });
+
+      console.log('connected');
+
     }
+
+
+
   }
 
 }

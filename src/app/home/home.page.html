@@ -18,14 +18,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content >
+<ion-content>
   <!-- SEARCH BAR -->
-  <ion-searchbar color="light" [autoHeight]="true" [debounce]="1000" (ionInput)="handleSearch($event)"></ion-searchbar>
+  <ion-searchbar color="light" [debounce]="1000" (ionInput)="handleSearch($event)"></ion-searchbar>
 
   <!-- <ion-grid>
     <ion-row>
       <ion-col size="12"> -->
-  <swiper-container #contactSlides [observer]="true" [observeParents]="true">
+  <swiper-container #contactSlides [autoHeight]="true" [observer]="true" [observeParents]="true" >
 
     <!-- HOSPITAL -->
     <swiper-slide>
@@ -50,7 +50,15 @@
         </app-contact-item>
       </ion-list>
 
-      
+      <ion-list [inset]="false" *ngIf="!isLoading && hospitalContacts?.length > 0">
+        <app-contact-item *ngFor="let item of hospitalContacts" title="{{item.hospital.contact_name}}"
+          location="{{item.hospital.contact_location}}" contact_number_smart="{{item.hospital.contact_number_smart}}"
+          contact_number_globe={{item.hospital.contact_number_globe}} municipalityName="{{municipalityName}}"
+          provinceName="{{provinceName}}" image="{{item.hospital.image}}">
+        </app-contact-item>
+      </ion-list>
+
+
     </swiper-slide>
 
     <!-- POLICE -->
@@ -122,6 +130,9 @@
         </app-contact-item>
       </ion-list>
 
+
+
+
     </swiper-slide>
 
   </swiper-container>
@@ -132,33 +143,58 @@
 </ion-content>
 
 
+
 <ion-footer>
   <ion-toolbar>
-    <ion-tabs>
+    <ion-grid fixed>
+      <ion-row class="footer-menu">
+        <ion-col size="3" class="border" (click)="switchContact('hospital')" [ngClass]="{'active-contact': activeContact === 'hospital'}" >
+          <div><ion-icon name="medkit-outline"></ion-icon></div>
+          <ion-text>
+            Hospital
+          </ion-text>
+        </ion-col>
+        <ion-col size="3" class="border" (click)="switchContact('police')" [ngClass]="{'active-contact': activeContact === 'police'}" >
+          <div><ion-icon name="car-sport-outline"></ion-icon></div>
+          <ion-text>
+            Police
+          </ion-text>
+        </ion-col>
+        <ion-col size="3" class="border" (click)="switchContact('fire')" [ngClass]="{'active-contact': activeContact === 'fire'}" >
+          <div><ion-icon name="car-outline"></ion-icon></div>
+          <ion-text>
+            Fire
+          </ion-text>
+        </ion-col>
+        <ion-col size="3" (click)="switchContact('ambulance')" [ngClass]="{'active-contact': activeContact === 'ambulance'}" >
+          <div><ion-icon name="bus-outline"></ion-icon></div>
+          <ion-text>
+            Ambulance
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <!-- <ion-tabs>
       <ion-tab-bar slot="bottom">
         <ion-tab-button (click)="switchContact('hospital')"
           [ngClass]="{'active-contact': activeContact === 'hospital'}">
-          <!-- <img width="32" height="32" src="https://img.icons8.com/emoji/32/hospital-emoji.png" alt="hospital-emoji" /> -->
-          <!-- <ion-icon name="medkit-outline"></ion-icon> -->
+
           Hospital
         </ion-tab-button>
         <ion-tab-button (click)="switchContact('police')" [ngClass]="{'active-contact': activeContact === 'police'}">
-          <!-- <img width="32" height="32" src="https://img.icons8.com/color/32/police-car.png" alt="police-car" /> -->
-          <!-- <ion-icon name="car-sport-outline"></ion-icon> -->
+          
           Police
         </ion-tab-button>
         <ion-tab-button (click)="switchContact('fire')" [ngClass]="{'active-contact': activeContact === 'fire'}">
-          <!-- <img width="32" height="32" src="https://img.icons8.com/color/32/fire-truck.png" alt="fire-truck" /> -->
-          <!-- <ion-icon name="car-outline"></ion-icon> -->
+          
           Fire
         </ion-tab-button>
         <ion-tab-button (click)="switchContact('ambulance')"
           [ngClass]="{'active-contact': activeContact === 'ambulance'}">
-          <!-- <img width="32" height="32" src="https://img.icons8.com/officel/32/ambulance.png" alt="ambulance" /> -->
-          <!-- <ion-icon name="car-outline"></ion-icon> -->
+          
           Ambulance
         </ion-tab-button>
       </ion-tab-bar>
-    </ion-tabs>
+    </ion-tabs> -->
   </ion-toolbar>
 </ion-footer>
