@@ -8,6 +8,8 @@ import { Network } from '@capacitor/network';
 import { CapacitorHttp } from '@capacitor/core';
 import { environment } from 'src/environments/environment';
 import { ToastService } from '../services/toast.service';
+import { ProvinceService } from './../services/province.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-base',
@@ -22,19 +24,26 @@ export class BaseComponent implements ViewWillLeave {
   public municipalityId: any = null;
   public isConnected: boolean = false;
 
+  public provinceSub: Subscription;
+
   constructor(
     public storage: StorageService,
     public router: Router,
     public alertController: AlertService,
     public loadingController: LoadingService,
     public navCtrl: NavController,
-    public toastCtrl: ToastService
+    public toastCtrl: ToastService,
+    public provinceService: ProvinceService
   ) {
     // this.load();
+    this.provinceSub = this.provinceService.province.subscribe(provinces => {
+      this.provinces = provinces;
+    })
   }
 
   ionViewWillLeave() {
     Network.removeAllListeners();
+    this.provinceSub.unsubscribe();
     console.log('remove')
   }
 
@@ -82,11 +91,12 @@ export class BaseComponent implements ViewWillLeave {
     console.log('municipality', this.municipalityId);
 
     // let response = await this.getRequest(`/contact/${this.provinceId}`);
-
+    await this.loadingController.showLoading('Fetching Records');
     this.getRequest(`/contact/${this.provinceId}`).then(async (response) => {
       let contacts = JSON.stringify(response.data.data);
       await this.storage.set('contacts', contacts);
       await this.storage.set('municipalityId', this.municipalityId);
+      this.loadingController.dismiss();
       this.router.navigateByUrl('/home');
       // this.navCtrl.navigateForward
       console.log('redirect to home');
@@ -131,11 +141,12 @@ export class BaseComponent implements ViewWillLeave {
 
   async setData(connection: any) {
     if (!connection) {
-      await this.alertController.showAlert('Please connect to internet to fetch the latest record', null, 'The app will be free for offline use once you get the contacts. ');
       this.isConnected = false;
-      this.provinces = null;
+      // this.provinces = null;
+      this.provinceService.setProvince(null);
       this.municipalities = null;
       console.log('not connected');
+      await this.alertController.showAlert('Please connect to internet to fetch the latest record', null, 'The app will be free for offline use once you get the contacts. ');
 
     } else {
 
@@ -147,7 +158,8 @@ export class BaseComponent implements ViewWillLeave {
       await this.loadingController.showLoading('Fetching Records');
       this.isConnected = true;
       this.getRequest('/province').then((response) => {
-        this.provinces = response.data.data;
+        // this.provinces = response.data.data;
+        this.provinceService.setProvince(response.data.data);
         this.loadingController.dismiss();
       }).catch((e) => {
         console.log('error')

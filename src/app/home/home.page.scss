@@ -76,14 +76,13 @@ ion-grid {
   text-align: center;
 
   ion-col {
-    ion-icon {
-      font-size: 1.1rem;
+    ion-icon, ion-text {
+      font-size: 0.85rem;
     }
 
 
     &.active-contact {
-      color: rgb(151, 21, 21);
-
+      color: var(--ion-color-danger) !important;
     }
 
     &.border {

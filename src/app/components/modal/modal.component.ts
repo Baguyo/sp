@@ -7,6 +7,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AlertService } from 'src/app/services/alert.service';
 import { LoadingService } from 'src/app/services/loading.service';
+import { ProvinceService } from 'src/app/services/province.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { environment } from 'src/environments/environment';
@@ -33,10 +34,10 @@ export class ModalComponent extends BaseComponent implements ViewDidEnter {
     alertController: AlertService,
     loadingController: LoadingService,
     navCtrl: NavController,
-    toastCtrl: ToastService
-
+    toastCtrl: ToastService,
+    provinceService: ProvinceService
   ) {
-    super(storage, router, alertController, loadingController, navCtrl, toastCtrl);
+    super(storage, router, alertController, loadingController, navCtrl, toastCtrl, provinceService);
 
   }
 
