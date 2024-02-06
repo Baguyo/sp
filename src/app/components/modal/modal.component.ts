@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CapacitorHttp } from '@capacitor/core';
 import { Network } from '@capacitor/network';
@@ -35,9 +35,10 @@ export class ModalComponent extends BaseComponent implements ViewDidEnter {
     loadingController: LoadingService,
     navCtrl: NavController,
     toastCtrl: ToastService,
-    provinceService: ProvinceService
+    provinceService: ProvinceService,
+   change: ChangeDetectorRef
   ) {
-    super(storage, router, alertController, loadingController, navCtrl, toastCtrl, provinceService);
+    super(storage, router, alertController, loadingController, navCtrl, toastCtrl, provinceService, change);
 
   }
 

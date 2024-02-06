@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { StorageService } from '../services/storage.service';
 import { Router } from '@angular/router';
 import { AlertService } from '../services/alert.service';
@@ -33,7 +33,9 @@ export class BaseComponent implements ViewWillLeave {
     public loadingController: LoadingService,
     public navCtrl: NavController,
     public toastCtrl: ToastService,
-    public provinceService: ProvinceService
+    public provinceService: ProvinceService,
+    public changeRef: ChangeDetectorRef
+
   ) {
     // this.load();
     this.provinceSub = this.provinceService.province.subscribe(provinces => {
@@ -61,8 +63,8 @@ export class BaseComponent implements ViewWillLeave {
 
     Network.addListener('networkStatusChange', async (status: any) => {
       console.log('Network status changed', status);
-
-      this.setData(status.connected);
+      console.log(status.connected);
+      // this.setData(status.connected);
     });
 
   }
@@ -141,6 +143,7 @@ export class BaseComponent implements ViewWillLeave {
 
   async setData(connection: any) {
     if (!connection) {
+      console.log('no connection run');
       this.isConnected = false;
       // this.provinces = null;
       this.provinceService.setProvince(null);
@@ -150,6 +153,7 @@ export class BaseComponent implements ViewWillLeave {
 
     } else {
 
+      console.log('with connection run');
       if (this.alertController.isOpen()) {
         this.alertController.dismiss();
       }
@@ -171,6 +175,7 @@ export class BaseComponent implements ViewWillLeave {
       console.log('connected');
 
     }
+    // this.changeRef.detectChanges();
 
 
 

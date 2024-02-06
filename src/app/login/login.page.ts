@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CapacitorHttp } from '@capacitor/core';
 import { Network } from '@capacitor/network';
 import { environment } from 'src/environments/environment';
@@ -32,9 +32,10 @@ export class LoginPage extends BaseComponent {
    loadingController: LoadingService,
    navCtrl: NavController,
    toastCtrl: ToastService,
-   provinceService: ProvinceService
+   provinceService: ProvinceService,
+   change: ChangeDetectorRef
   ) { 
-    super(storage, router, alertController, loadingController, navCtrl, toastCtrl, provinceService);
+    super(storage, router, alertController, loadingController, navCtrl, toastCtrl, provinceService, change);
     super.load();
   }
 
