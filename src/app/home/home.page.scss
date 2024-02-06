@@ -1,5 +1,10 @@
 ion-header {
   border-bottom: 1px solid rgba(54, 54, 54, 0.1);
+
+  ion-toolbar {
+    --background: rgb(151, 21, 21);
+    --color: #fff;
+  }
 }
 
 .location-container {
@@ -71,15 +76,17 @@ ion-grid {
   text-align: center;
 
   ion-col {
-    ion-icon{
+    ion-icon {
       font-size: 1.1rem;
     }
-    
+
 
     &.active-contact {
-      color: var(--ion-color-danger) !important;
+      color: rgb(151, 21, 21);
+
     }
-    &.border{
+
+    &.border {
       border-right: 1px solid #DEDEDE;
     }
 

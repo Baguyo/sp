@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CapacitorHttp } from '@capacitor/core';
 import { Network } from '@capacitor/network';
-import { IonModal, NavController, ToastController } from '@ionic/angular';
+import { IonModal, NavController, ToastController, ViewDidEnter } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AlertService } from 'src/app/services/alert.service';
@@ -16,13 +16,16 @@ import { environment } from 'src/environments/environment';
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
 })
-export class ModalComponent extends BaseComponent {
+export class ModalComponent extends BaseComponent implements ViewDidEnter {
 
   // public provinces: any;
   // public provinceId: any = null;
   // public municipalities: any = null;
   // public municipalityId: any = null;
   // public isConnected: boolean = false;
+  public storedMunicipalities: any = [];
+  public storedMunicipalityId: any = null;
+  @ViewChild('locationSlide') locationSlide: ElementRef;
 
   constructor(
     storage: StorageService,
@@ -31,17 +34,53 @@ export class ModalComponent extends BaseComponent {
     loadingController: LoadingService,
     navCtrl: NavController,
     toastCtrl: ToastService
-    
+
   ) {
     super(storage, router, alertController, loadingController, navCtrl, toastCtrl);
 
-   }
+  }
+
+  async ionViewDidEnter() {
+    this.locationSlide.nativeElement.swiper.allowTouchMove = false;
+    let data: any = await this.storage.get('contacts');
+    data = JSON.parse(data.value);
+    data.municipality.forEach((element: any) => {
+      this.storedMunicipalities.push({ "id": element.id, "municipality_name": element.municipality_name });
+      console.log(element);
+    });
+  }
+
+  async changeMunicipality() {
+    console.log(this.storedMunicipalityId);
+    await this.storage.set('municipalityId', this.storedMunicipalityId);
+    window.location.reload();
+  }
+
+  handleChangeStoredMunicipality(ev: any) {
+    this.storedMunicipalityId = ev.target.value;
+    console.log(this.storedMunicipalityId);
+  }
+
+  changeType(ev: any) {
+    let type = ev.target.value;
+    switch (type) {
+      case 'province':
+        this.locationSlide.nativeElement.swiper.slideTo(1, 500);
+        super.load();
+        break;
+
+      default:
+        this.locationSlide.nativeElement.swiper.slideTo(0, 500);
+        break;
+    }
+  }
+
 
   //  ngOnInit() {
-    
+
   // }
 
-  
+
 
   // public async handleProvinceChange(ev: any) {
   //   this.provinceId = ev.target.value;

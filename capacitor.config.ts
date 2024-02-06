@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
-  appName: 'SP',
+  appName: 'Emergency Contacts',
   webDir: 'www',
   server: {
     androidScheme: 'https'

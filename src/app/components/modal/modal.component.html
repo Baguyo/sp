@@ -6,7 +6,7 @@
 
 <ion-content class="ion-padding">
 
-  <ion-segment value="municipality" mode="ios">
+  <ion-segment value="municipality" mode="ios" (ionChange)="changeType($event)">
     <ion-segment-button value="municipality">
       <ion-label>Change Municipality</ion-label>
     </ion-segment-button>
@@ -15,38 +15,72 @@
     </ion-segment-button>
   </ion-segment>
 
-  <swiper-container>
+  <swiper-container #locationSlide>
     <swiper-slide>
 
       <ion-list>
         <ion-item>
           <ion-label>
-            {{municipalities?.length > 0 ? 'Select City / Municipality': municipalities?.length === 0 ? 'No Municipalities data for selected Province' : 'Select City / Municipality'}}
+            Select City / Municipality
           </ion-label>
-          <ion-select disabled="{{municipalities?.length > 0 ? false: true }}"
-            placeholder="{{municipalities?.length > 0 ? 'ex. Puerto Princesa City': municipalities?.length === 0 ? '' : 'ex. Puerto Princesa City'}}"
+          <ion-select (ionChange)="handleChangeStoredMunicipality($event)" placeholder="ex. Puerto Princesa City"
             (ionChange)="handleMunicipalityChange($event)">
-      
-            <ng-container *ngIf="municipalities?.length > 0">
-              <ion-select-option *ngFor="let municipality of municipalities" value="{{municipality.id}}">
+
+            <ng-container *ngIf="storedMunicipalities?.length > 0">
+              <ion-select-option *ngFor="let municipality of storedMunicipalities" value="{{municipality.id}}">
                 {{municipality.municipality_name}}
               </ion-select-option>
             </ng-container>
-      
+
           </ion-select>
         </ion-item>
       </ion-list>
 
-      <!-- <ion-item>
-        <ion-label>Pizza</ion-label>
-        <ion-select value="peperoni" multiple="true" placeholder="Select Pizza">
-          <ion-select-option value="peperoni">Peperoni</ion-select-option>
-          <ion-select-option value="hawaii">Hawaii</ion-select-option>
-        </ion-select>
-      </ion-item> -->
-      
+      <ion-button expand="block" shape="round" color="primary" class="submit-btn ion-margin-top"
+        (click)="changeMunicipality()" disabled="{{!storedMunicipalityId}}">
+        Submit
+      </ion-button>
     </swiper-slide>
-  </swiper-container>  
+
+    <swiper-slide>
+      <!-- PROVINCE -->
+      <ion-item>
+    <ion-label>Province</ion-label>
+    <ion-select placeholder="ex. Palawan" (ionChange)="handleProvinceChange($event)" disabled="{{!isConnected}}">
+
+      <ion-select-option *ngFor="let province of provinces" value="{{province.id}}">
+        {{province.province_name}}
+      </ion-select-option>
+
+    </ion-select>
+  </ion-item>
+
+      <!-- CITY/MUNICIPALITY -->
+      <ion-item>
+    <ion-label>
+      {{municipalities?.length > 0 ? 'Select City / Municipality': municipalities?.length === 0 ? 'No Municipalities data for selected Province' : 'Select City / Municipality'}}"
+    </ion-label>
+    <ion-select disabled="{{municipalities?.length > 0 ? false: true }}"
+      placeholder="{{municipalities?.length > 0 ? 'ex. Puerto Princesa City': municipalities?.length === 0 ? '' : 'ex. Puerto Princesa City'}}"
+      (ionChange)="handleMunicipalityChange($event)">
+
+      <ng-container *ngIf="municipalities?.length > 0">
+        <ion-select-option *ngFor="let municipality of municipalities" value="{{municipality.id}}">
+          {{municipality.municipality_name}}
+        </ion-select-option>
+      </ng-container>
+
+    </ion-select>
+  </ion-item>
+
+      <ion-button expand="block" shape="round" color="primary" class="submit-btn ion-margin-top"
+        (click)="handleDataChange()" disabled="{{municipalityId && provinceId ?  false : true}}">
+        SUBMIT
+      </ion-button>
+    </swiper-slide>
+
+
+  </swiper-container>
 
   <!-- PROVINCE -->
   <!-- <ion-item>
@@ -83,4 +117,3 @@
   </ion-button> -->
 
 </ion-content>
-
