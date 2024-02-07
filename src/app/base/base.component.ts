@@ -62,9 +62,11 @@ export class BaseComponent implements ViewWillLeave {
     this.setData(isConnected);
 
     Network.addListener('networkStatusChange', async (status: any) => {
-      console.log('Network status changed', status);
-      console.log(status.connected);
-      // this.setData(status.connected);
+      if (this.isConnected !== status.connected) {
+        console.log('Network status changed', status);
+        console.log(status.connected);
+        this.setData(status.connected);
+      }
     });
 
   }
@@ -116,17 +118,21 @@ export class BaseComponent implements ViewWillLeave {
     console.log('municipality', this.municipalityId);
 
     // let response = await this.getRequest(`/contact/${this.provinceId}`);
+    await this.loadingController.showLoading('Fetching Records');
     this.getRequest(`/contact/${this.provinceId}`).then(async (response) => {
       let contacts = JSON.stringify(response.data.data);
       console.log(contacts);
       await this.storage.set('contacts', contacts);
       await this.storage.set('municipalityId', this.municipalityId);
+      this.loadingController.dismiss();
       window.location.reload();
       // this.router.navigateByUrl('/login');
       // this.navCtrl.navigateForward
       console.log('redirect to home via change');
     }).catch(e => {
       console.log(e);
+      this.toastCtrl.presentToast('Connection error. Please try again.');
+      this.loadingController.dismiss();
     });
   }
 
@@ -158,9 +164,8 @@ export class BaseComponent implements ViewWillLeave {
         this.alertController.dismiss();
       }
 
-
-      await this.loadingController.showLoading('Fetching Records');
       this.isConnected = true;
+      await this.loadingController.showLoading('Fetching Records');
       this.getRequest('/province').then((response) => {
         // this.provinces = response.data.data;
         this.provinceService.setProvince(response.data.data);
@@ -175,7 +180,7 @@ export class BaseComponent implements ViewWillLeave {
       console.log('connected');
 
     }
-    // this.changeRef.detectChanges();
+    this.changeRef.detectChanges();
 
 
 
