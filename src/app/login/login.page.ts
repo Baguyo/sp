@@ -1,12 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { CapacitorHttp } from '@capacitor/core';
-import { Network } from '@capacitor/network';
-import { environment } from 'src/environments/environment';
+import { App as CapacitorApp } from '@capacitor/app';
 import { StorageService } from '../services/storage.service';
 import { Router } from '@angular/router';
 import { AlertService } from '../services/alert.service';
 import { LoadingService } from '../services/loading.service';
-import { NavController } from '@ionic/angular';
+import { NavController, ViewDidLeave, ViewWillLeave } from '@ionic/angular';
 import { BaseComponent } from '../base/base.component';
 import { ToastService } from '../services/toast.service';
 import { ProvinceService } from './../services/province.service';
@@ -17,7 +15,7 @@ import { ProvinceService } from './../services/province.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage extends BaseComponent {
+export class LoginPage extends BaseComponent  {
 
   // public provinces: any;
   // public provinceId: any = null;
@@ -37,6 +35,13 @@ export class LoginPage extends BaseComponent {
   ) { 
     super(storage, router, alertController, loadingController, navCtrl, toastCtrl, provinceService, change);
     super.load();
+    CapacitorApp.addListener('backButton', ({canGoBack}) => {
+      if(!canGoBack){
+        CapacitorApp.exitApp();
+      } else {
+        window.history.back();
+      }
+    });
   }
 
   // async ngOnInit() {

@@ -35,7 +35,7 @@ export class HomePage implements OnInit, ViewDidEnter {
   ) { }
 
   async ngOnInit() {
-    // this.confBackButton();
+    this.confBackButton();
 
     this.isLoading = true;
 
@@ -211,11 +211,12 @@ export class HomePage implements OnInit, ViewDidEnter {
 
   confBackButton()  {
     CapacitorApp.addListener('backButton', ({canGoBack}) => {
-      if(!canGoBack){
-        CapacitorApp.exitApp();
-      } else {
-        window.history.back();
-      }
+      CapacitorApp.exitApp();
+
+      // if(!canGoBack){
+      // } else {
+      //   window.history.back();
+      // }
     });
   }
 
